@@ -1,0 +1,22 @@
+{
+    "name": "wandxx/topup",
+    "description": "topup module",
+    "type": "laravel-plugin",
+    "require": {
+        "wandxx/support": "^1.0",
+        "envant/fireable": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wandy purnomo",
+            "email": "wandypurnomo92@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Wandxx\\Topup\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
