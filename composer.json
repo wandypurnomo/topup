@@ -18,5 +18,12 @@
             "Wandxx\\Topup\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wandxx\\Topup\\Providers\\TopupServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "stable"
 }
