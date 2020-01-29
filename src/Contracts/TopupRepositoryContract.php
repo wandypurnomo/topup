@@ -15,11 +15,11 @@ interface TopupRepositoryContract
 
     public function userTopup(Request $request, string $userId, int $perPage = 10);
 
-    public function makeTopup(DefaultRequestInterface $request, string $userId):Model;
+    public function makeTopup(DefaultRequestInterface $request, string $userId): Model;
 
-    public function updateTopup(DefaultRequestInterface $request, string $code, string $userId):Model;
+    public function updateTopup(DefaultRequestInterface $request, string $code, string $userId): Model;
 
-    public function deleteTopup(string $code, string $userId):void;
+    public function deleteTopup(string $code, string $userId): void;
 
-    public function markTopupAs(int $status, string $code, string $userId):Model;
+    public function markTopupAs(int $status, string $code, string $userId, string $failedMessage = null): Model;
 }

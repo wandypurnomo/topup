@@ -105,9 +105,10 @@ class TopupRepository implements TopupRepositoryContract
         }
     }
 
-    public function markTopupAs(int $status, string $code, string $userId): Model
+    public function markTopupAs(int $status, string $code, string $userId, string $failedMessage = null): Model
     {
-        throw_if($status == TopUpStatus::PLACED, new BadRequestHttpException("cant back to placed"));
+        throw_if($status == TopUpStatus::PLACED, new BadRequestHttpException("cant back to placed."));
+        throw_if($status == TopUpStatus::FAILED && $failedMessage == null, new BadRequestHttpException("failed message required."));
 
         $data = ["status" => $status];
         $model = $this->_model
@@ -117,6 +118,10 @@ class TopupRepository implements TopupRepositoryContract
             ->firstOrFail();
 
         $model->update($data);
+
+        if ($status == TopUpStatus::FAILED && $failedMessage != null) {
+            $model->update(["metadata->failed_message" => $failedMessage]);
+        }
 
         return $model;
     }
