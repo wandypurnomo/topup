@@ -19,7 +19,7 @@ class TopupServiceProvider extends ServiceProvider
     private function _publishing(): void
     {
         $this->publishes([
-            __DIR__ . "../Migrations" => database_path("migrations")
+            __DIR__ . "/../Migrations" => database_path("migrations")
         ], "migrations");
     }
 
