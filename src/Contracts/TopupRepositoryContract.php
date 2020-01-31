@@ -15,9 +15,9 @@ interface TopupRepositoryContract
 
     public function userTopup(Request $request, string $userId, int $perPage = 10);
 
-    public function makeTopup(DefaultRequestInterface $request, string $userId): Model;
+    public function makeTopup(array $data, string $userId): Model;
 
-    public function updateTopup(DefaultRequestInterface $request, string $code, string $userId): Model;
+    public function updateTopup(array $data, string $code, string $userId): Model;
 
     public function deleteTopup(string $code, string $userId): void;
 

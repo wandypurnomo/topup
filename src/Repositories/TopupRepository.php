@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Wandxx\Support\Interfaces\DefaultRequestInterface;
 use Wandxx\Topup\Constants\TopUpStatus;
 use Wandxx\Topup\Contracts\TopupRepositoryContract;
 use Wandxx\Topup\Events\TopupCreated;
@@ -58,9 +57,8 @@ class TopupRepository implements TopupRepositoryContract
         return $query->paginate($perPage);
     }
 
-    public function makeTopup(DefaultRequestInterface $request, string $userId): Model
+    public function makeTopup(array $data, string $userId): Model
     {
-        $data = $request->data();
         $data["created_by"] = $userId;
 
         $model = $this->_model
@@ -72,9 +70,9 @@ class TopupRepository implements TopupRepositoryContract
         return $model;
     }
 
-    public function updateTopup(DefaultRequestInterface $request, string $code, string $userId): Model
+    public function updateTopup(array $data, string $code, string $userId): Model
     {
-        $data = $request->data();
+        ;
         $data["created_by"] = $userId;
 
         $model = $this->_model
