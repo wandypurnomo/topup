@@ -8,9 +8,12 @@ use Envant\Fireable\FireableAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Wandxx\Support\Traits\UuidForKey;
 use Wandxx\Topup\Constants\TopUpStatus;
+use Wandxx\Topup\Events\TopupCreated;
+use Wandxx\Topup\Events\TopupDeleted;
 use Wandxx\Topup\Events\TopupDone;
 use Wandxx\Topup\Events\TopupFailed;
 use Wandxx\Topup\Events\TopupOnProgress;
+use Wandxx\Topup\Events\TopupUpdated;
 
 class Topup extends Model
 {
@@ -25,4 +28,19 @@ class Topup extends Model
             TopUpStatus::FAILED => TopupFailed::class,
         ]
     ];
+
+    protected static function boot()
+    {
+        self::created(function (Model $model) {
+            event(new TopupCreated($model));
+        });
+
+        self::updated(function (Model $model) {
+            event(new TopupUpdated($model));
+        });
+
+        self::deleting(function (Model $model) {
+            event(new TopupDeleted($model));
+        });
+    }
 }

@@ -1,29 +1,32 @@
 {
-    "name": "wandxx/topup",
-    "description": "topup module",
-    "type": "laravel-plugin",
-    "require": {
-        "wandxx/support": "^1.0",
-        "envant/fireable": "^1.0"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "wandy purnomo",
-            "email": "wandypurnomo92@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Wandxx\\Topup\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Wandxx\\Topup\\Providers\\TopupServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "stable"
+  "name": "wandxx/topup",
+  "description": "topup module",
+  "type": "laravel-plugin",
+  "require": {
+    "wandxx/support": "^1.0",
+    "envant/fireable": "^1.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "wandy purnomo",
+      "email": "wandypurnomo92@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Wandxx\\Topup\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Wandxx\\Topup\\Providers\\TopupServiceProvider"
+      ],
+      "aliases": {
+        "TopupService": "Wandxx\\Topup\\Services\\TopupServiceFacade"
+      }
+    }
+  },
+  "minimum-stability": "stable"
 }

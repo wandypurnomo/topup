@@ -4,18 +4,13 @@
 namespace Wandxx\Topup\Repositories;
 
 
-use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Wandxx\Topup\Constants\TopUpStatus;
 use Wandxx\Topup\Contracts\TopupRepositoryContract;
-use Wandxx\Topup\Events\TopupCreated;
-use Wandxx\Topup\Events\TopupDeleted;
-use Wandxx\Topup\Events\TopupUpdated;
 use Wandxx\Topup\Models\Topup;
 
 class TopupRepository implements TopupRepositoryContract
@@ -41,10 +36,9 @@ class TopupRepository implements TopupRepositoryContract
         return $query->paginate($perPage);
     }
 
-    public function userTopup(Request $request, string $userId, int $perPage = 10)
+    public function userTopup(Request $request, string $userId, int $perPage = 10): LengthAwarePaginator
     {
         $query = $this->_model->newQuery();
-
         $where = function (Builder $q) use ($request, $userId) {
             $q->where("created_by", $userId);
 
@@ -52,7 +46,6 @@ class TopupRepository implements TopupRepositoryContract
                 $q->where("code", $request->get("code"));
             }
         };
-
         $query->where($where);
         return $query->paginate($perPage);
     }
@@ -60,21 +53,15 @@ class TopupRepository implements TopupRepositoryContract
     public function makeTopup(array $data, string $userId): Model
     {
         $data["created_by"] = $userId;
-
-        $model = $this->_model
+        return $this->_model
             ->newQuery()
             ->create($data);
-
-        event(new TopupCreated($model));
-
-        return $model;
     }
 
     public function updateTopup(array $data, string $code, string $userId): Model
     {
         ;
         $data["created_by"] = $userId;
-
         $model = $this->_model
             ->newQuery()
             ->where("code", $code)
@@ -82,8 +69,6 @@ class TopupRepository implements TopupRepositoryContract
             ->firstOrFail();
 
         $model->update($data);
-        event(new TopupUpdated($model));
-
         return $model;
     }
 
@@ -95,25 +80,16 @@ class TopupRepository implements TopupRepositoryContract
             ->where("created_by", $userId)
             ->firstOrFail();
 
-        try {
-            event(new TopupDeleted($model));
-            $model->delete();
-        } catch (Exception $e) {
-            Log::debug($e->getMessage());
-        }
+        $model->delete();
     }
 
-    public function markTopupAs(int $status, string $code, string $userId, string $failedMessage = null): Model
+    public function markTopupAs(int $status, Model $topup, string $failedMessage = null): Model
     {
         throw_if($status == TopUpStatus::PLACED, new BadRequestHttpException("cant back to placed."));
         throw_if($status == TopUpStatus::FAILED && $failedMessage == null, new BadRequestHttpException("failed message required."));
 
         $data = ["status" => $status];
-        $model = $this->_model
-            ->newQuery()
-            ->where("code", $code)
-            ->where("created_by", $userId)
-            ->firstOrFail();
+        $model = $topup;
 
         $model->update($data);
 
@@ -122,5 +98,25 @@ class TopupRepository implements TopupRepositoryContract
         }
 
         return $model;
+    }
+
+    public function findTopupByCode(string $topupCode, string $userId): Model
+    {
+        return $this
+            ->_model
+            ->newQuery()
+            ->where("code", $topupCode)
+            ->where("created_by", $userId)
+            ->firstOrFail();
+    }
+
+    public function findTopupById(string $topupId, string $userId): Model
+    {
+        return $this
+            ->_model
+            ->newQuery()
+            ->where("id", $topupId)
+            ->where("created_by", $userId)
+            ->firstOrFail();
     }
 }
