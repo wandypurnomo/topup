@@ -35,12 +35,12 @@ class TopupService
     public function userTopupDetailByCode(string $code): UserTopupService
     {
         $this->topup = $this->_topupRepository->findTopupByCode($code, auth($this->_guard)->id());
-        return new UserTopupService($this->topup, $this->_topupRepository, $this->_guard);
+        return new UserTopupService($this->topup, resolve(TopupRepositoryContract::class), $this->_guard);
     }
 
     public function userTopupDetailById(string $id): UserTopupService
     {
         $this->topup = $this->_topupRepository->findTopupById($id, Auth::guard($this->_guard)->id());
-        return new UserTopupService($this->topup, $this->_topupRepository, $this->_guard);
+        return new UserTopupService($this->topup, resolve(TopupRepositoryContract::class), $this->_guard);
     }
 }
