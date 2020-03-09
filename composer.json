@@ -21,7 +21,8 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Wandxx\\Topup\\Providers\\TopupServiceProvider"
+        "Wandxx\\Topup\\Providers\\TopupServiceProvider",
+        "Wandxx\\Topup\\Services\\TopupServiceServiceProvider"
       ],
       "aliases": {
         "TopupService": "Wandxx\\Topup\\Services\\TopupServiceFacade"

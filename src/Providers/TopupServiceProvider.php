@@ -19,7 +19,6 @@ class TopupServiceProvider extends ServiceProvider
     public function register()
     {
         $this->_bindRepository();
-        $this->_registerServices();
     }
 
     private function _publishing(): void
