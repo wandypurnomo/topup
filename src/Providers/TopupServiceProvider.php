@@ -6,6 +6,7 @@ namespace Wandxx\Topup\Providers;
 
 use Carbon\Laravel\ServiceProvider;
 use Wandxx\Topup\Contracts\TopupRepositoryContract;
+use Wandxx\Topup\Models\Topup;
 use Wandxx\Topup\Repositories\TopupRepository;
 use Wandxx\Topup\Services\TopupService;
 
@@ -27,7 +28,9 @@ class TopupServiceProvider extends ServiceProvider
 
     private function _bindRepository(): void
     {
-        $this->app->bind(TopupRepositoryContract::class, TopupRepository::class);
+        $this->app->bind(TopupRepositoryContract::class, function () {
+            return new TopupRepository(new Topup());
+        });
     }
 
     private function _registerServices(): void
