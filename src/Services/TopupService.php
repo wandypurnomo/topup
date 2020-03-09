@@ -27,6 +27,11 @@ class TopupService
         return $this;
     }
 
+    public function allTopup(Request $request, int $perPage = 10): LengthAwarePaginator
+    {
+        return $this->_topupRepository->all($request, $perPage);
+    }
+
     public function allUserTopup(Request $request, int $perPage = 10): LengthAwarePaginator
     {
         return $this->_topupRepository->userTopup($request, auth($this->_guard)->id(), $perPage);
