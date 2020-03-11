@@ -31,6 +31,8 @@ class Topup extends Model
 
     protected static function boot()
     {
+        parent::boot();
+
         self::created(function (Model $model) {
             event(new TopupCreated($model));
         });

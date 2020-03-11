@@ -32,11 +32,4 @@ class TopupServiceProvider extends ServiceProvider
     {
         $this->app->bind(TopupRepositoryContract::class, TopupRepository::class);
     }
-
-    private function _registerServices(): void
-    {
-        $this->app->bind("topupService", function () {
-            return new TopupService(resolve(TopupRepositoryContract::class));
-        });
-    }
 }
